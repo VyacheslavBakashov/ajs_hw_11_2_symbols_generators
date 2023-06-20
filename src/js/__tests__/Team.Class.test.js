@@ -6,12 +6,11 @@ import Undead from '../Undead';
 const character1 = new Bowman('new1', 'Bowman');
 const character2 = new Swordsman('new2', 'Swordsman');
 const character3 = new Undead('new3', 'Undead');
-const character4 = new Undead('new4', 'Undead');
 
 test('Successful character adding', () => {
   const inp = new Team();
   inp.add(character1);
-  const expected = { members: [new Bowman('new1', 'Bowman')] };
+  const expected = { members: new Set([character1]) };
   expect(inp).toEqual(expected);
 });
 
@@ -23,13 +22,21 @@ test('Unsuccessful character adding', () => {
 
 test('Characters array adding', () => {
   const inp = new Team();
-  inp.addAll(character1, character2, character3, character4);
-  const expected = { members: [character1, character2, character3] };
+  inp.addAll(character1, character2, character3, character1);
+  const expected = { members: new Set([character1, character2, character3]) };
   expect(inp).toEqual(expected);
 });
 
+test('set of characters to array', () => {
+  const inp = new Team();
+  inp.addAll(character1, character2, character3);
+  const expected = [character1, character2, character3];
+  expect(inp.toArray()).toEqual(expected);
+});
+
 test('Team iteration', () => {
-  const inp = new Team(character1, character2, character3);
+  const inp = new Team();
+  inp.addAll(character1, character2, character3);
   const expected = [character1, character2, character3];
   let i = 0;
 
